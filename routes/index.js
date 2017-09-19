@@ -26,6 +26,17 @@ module.exports = (app) => {
         res.end('success!');
       });
     }
+
+    let userInfo = new UserSchema();
+    userInfo.id = 'admin';
+    userInfo.password = 'admin';
+    userInfo.name = 'admin';
+    userInfo.progress = 1000;
+    userInfo.last_success = new Date();
+    userInfo.save((err) => {
+      if (err) return res.status(500).end('database error');
+      res.end('success!');
+    });
   });
 
   app.post('/login', (req, res) => {
