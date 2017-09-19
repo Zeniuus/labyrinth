@@ -33,8 +33,8 @@ module.exports = (app) => {
     let pwVal = req.body.pw;
     UserSchema.findOne({ id: idVal, password: pwVal }, (err, userInfo) => {
       if (err) return res.status(500).end('database error');
-      if (!userInfo) return res.render('login_failed.html');
-      res.render('index.html');
+      if (!userInfo) return res.json({ success: false });
+      res.json({ success: true });
     });
   });
 }
