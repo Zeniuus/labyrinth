@@ -1,7 +1,7 @@
 let UserSchema = require('./../models/userInfo.js');
 class_num = 26;
 
-module.exports = (app) => {
+module.exports = (app, passport) => {
   app.get('/', (req, res) => {
     res.render('index.html');
   });
@@ -39,13 +39,7 @@ module.exports = (app) => {
     });
   });
 
-  app.post('/login', (req, res) => {
-    let idVal = req.body.id;
-    let pwVal = req.body.pw;
-    UserSchema.findOne({ id: idVal, password: pwVal }, (err, userInfo) => {
-      if (err) return res.status(500).end('database error');
-      if (!userInfo) return res.json({ success: false });
-      res.json({ success: true });
-    });
+  app.post('/login', passport.authenticate('local'), (req, res) => {
+    res.end(null);
   });
 }

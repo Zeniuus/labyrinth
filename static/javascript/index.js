@@ -15,20 +15,16 @@ $document.ready(() => {
     let pwVal = pwInputEle.value;
     axios.post('/login', {
       id: idVal,
-      pw: pwVal,
+      password: pwVal,
     })
     .then((res) => {
-      console.log(res);
-      if (res.data.success) {
-        sessionStorage.setItem('id', idVal);
-        sessionStorage.setItem('pw', pwVal);
-        location.reload();
-      } else {
-        document.getElementById('login_failed').style.visibility = 'visible';
-      }
+      console.log('response!');
+      sessionStorage.setItem('id', idVal);
+      sessionStorage.setItem('password', pwVal);
+      location.reload();
     })
     .catch((err) => {
-
+      document.getElementById('login_failed').style.visibility = 'visible';
     });
   };
 });
