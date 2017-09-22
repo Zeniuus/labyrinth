@@ -62,6 +62,7 @@ module.exports = (app, passport) => {
 
   app.post('/admin/problems/detail', (req, res) => {
     let problemInfo = new ProblemSchema();
+    console.log(req.body);
     problemInfo.title = req.body.title;
     problemInfo.number = req.body.number;
     problemInfo.imageName = req.body.imageName;
@@ -77,7 +78,7 @@ module.exports = (app, passport) => {
     });
   });
 
-  app.post('/admin/problems/photo', (req, res) => {
+  app.post('/admin/problems/image', (req, res) => {
     let form = new multiparty.Form();
     // get field name & value
     form.on('field', function(name, value) {

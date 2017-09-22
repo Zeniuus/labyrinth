@@ -36,17 +36,17 @@ db.once('open', () => {
 });
 mongoose.connect('mongodb://localhost/labyrinth');
 
-app.use('/problems', (req, res, next) => {
-  console.log(req.isAuthenticated);
-  console.log(req.isAuthenticated());
-  if (!req.isAuthenticated()) {
-    console.log('not authenticated');
-    res.redirect('/')
-  } else {
-    console.log('authenticated');
-    next();
-  }
-});
+// app.use('/problems', (req, res, next) => {
+//   console.log(req.isAuthenticated);
+//   console.log(req.isAuthenticated());
+//   if (!req.isAuthenticated()) {
+//     console.log('not authenticated');
+//     res.redirect('/')
+//   } else {
+//     console.log('authenticated');
+//     next();
+//   }
+// });
 app.use(express.static('static'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

@@ -5,7 +5,7 @@ $document.ready(() => {
   let problemListElem = document.getElementById('problem_list');
   let titleInputElem = document.getElementById('title_input');
   let numberInputElem = document.getElementById('number_input');
-  let photoInputElem = document.getElementById('photo_input');
+  let imageInputElem = document.getElementById('image_input');
   let solutionInputElem = document.getElementById('solution_input');
   let hint1InputElem = document.getElementById('hint1_input');
   let hint2InputElem = document.getElementById('hint2_input');
@@ -35,12 +35,12 @@ $document.ready(() => {
 
   $('#new_problem_btn').click(() => {
     let fd = new FormData();
-    let photoFile = photoInputElem.files[0];
-    fd.append(photoFile.name, photoFile);
+    let imageFile = imageInputElem.files[0];
+    fd.append(imageFile.name, imageFile);
     axios.post(server_url + '/admin/problems/detail', {
       title: titleInputElem.value,
       number: numberInputElem.value,
-      imageName: photoFile.name,
+      imageName: imageFile.name,
       solution: solutionInputElem.value,
       hint1: hint1InputElem.value,
       hint2: hint2InputElem.value,
@@ -48,7 +48,7 @@ $document.ready(() => {
     })
     .then((res) => {
       console.log('first success');
-      axios.post(server_url + '/admin/problems/photo', fd)
+      axios.post(server_url + '/admin/problems/image', fd)
       .then((res) => {
         console.log('second success');
         location.reload();
@@ -59,6 +59,16 @@ $document.ready(() => {
     })
     .catch((err) => {
       console.log(err);
+    });
+
+    console.log({
+      title: titleInputElem.value,
+      number: numberInputElem.value,
+      imageName: imageFile.name,
+      solution: solutionInputElem.value,
+      hint1: hint1InputElem.value,
+      hint2: hint2InputElem.value,
+      hint3: hint3InputElem.value,
     });
   });
 });
