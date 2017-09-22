@@ -1,0 +1,43 @@
+<html>
+  <head>
+    <title>Labyrinth</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.2/axios.js"></script>
+    <script src='./../javascript/admin.js'></script>
+  </head>
+  <body>
+    <h1>Hello, labyrinth!</h1>
+    <h2>새 문제 만들기</h2>
+    <form action="/admin/problems" method="post">
+      <div>
+        <label for="name">제목</label>
+        <input type="text" id="title_input" name="title" />
+      </div>
+      <div>
+        <label for="name">번호</label>
+        <input type="number" id="number_input" name="number" />
+      </div>
+      <div>
+        <label for="name">사진 파일</label>
+        <input type="file" id="photo_input" name="photo" />
+      </div>
+      <div>
+        <label for="name">답</label>
+        <input type="text" id="solution_input" name="solution" />
+      </div>
+      <div>
+        <label for="name">첫 번째 힌트</label>
+        <input type="text" id="hint1_input" name="hint1" />
+      </div>
+      <div>
+        <label for="name">두 번째 힌트</label>
+        <input type="text" id="hint2_input" name="hint2" />
+      </div>
+      <div>
+        <label for="name">세 번째 힌트</label>
+        <input type="text" id="hint3_input" name="hint3" />
+      </div>
+    </form>
+    <button id="new_problem_btn">문제 만들기</button>
+  </body>
+</html>
