@@ -49,6 +49,23 @@ module.exports = (app, passport) => {
     res.json(req.user);
   });
 
+  app.get('/problems/:number', (req, res) => {
+    ProblemSchema.findOne({ number: req.params.number }, (err, problemInfo) => {
+      if (err) return res.status(500);
+      res.render('problem.ejs', { problem: problemInfo });
+    });
+  });
+
+  app.post('/problems/:number/answer', (req, res) => {
+    console.log(req.params.number, req.body.answer);
+    ProblemSchema.findOne({ number: req.params.number, answer: req.body.answer }, (err, problemInfo) => {
+      console.log(problemInfo);
+      if (err) return res.status(500);
+      if (problemInfo) return res.json({ correct: true });
+      return res.json({ correct: false });
+    });
+  });
+
   app.get('/admin', (req, res) => {
     res.render('admin.html');
   });
@@ -66,7 +83,7 @@ module.exports = (app, passport) => {
     problemInfo.title = req.body.title;
     problemInfo.number = req.body.number;
     problemInfo.imageName = req.body.imageName;
-    problemInfo.solution = req.body.solution;
+    problemInfo.answer = req.body.answer;
     problemInfo.hint = [
       req.body.hint1,
       req.body.hint2,
@@ -108,7 +125,6 @@ module.exports = (app, passport) => {
       part.on('end', function() {
         console.log(filename + ' Part read complete');
         ProblemSchema.findOne({ imageName: filename }, (err, problemInfo) => {
-          // if (err) return res.status(500);
           res.json({ success: true });
         });
         writeStream.end();

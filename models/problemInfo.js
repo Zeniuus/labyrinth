@@ -3,7 +3,7 @@ let problemSchema = new mongoose.Schema({
   title: String,
   number: Number,
   imageName: String,
-  solution: String,
+  answer: String,
   hint: [ String ],
 });
 
