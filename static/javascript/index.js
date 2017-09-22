@@ -18,9 +18,8 @@ $document.ready(() => {
       password: pwVal,
     })
     .then((res) => {
-      console.log('response!');
-      sessionStorage.setItem('id', idVal);
-      sessionStorage.setItem('password', pwVal);
+      sessionStorage.setItem('id', res.data.id);
+      sessionStorage.setItem('name', res.data.name);
       location.reload();
     })
     .catch((err) => {
