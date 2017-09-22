@@ -64,7 +64,7 @@ module.exports = (app, passport) => {
     let problemInfo = new ProblemSchema();
     problemInfo.title = req.body.title;
     problemInfo.number = req.body.number;
-    problemInfo.photoName = req.body.photoName;
+    problemInfo.imageName = req.body.imageName;
     problemInfo.solution = req.body.solution;
     problemInfo.hint = [
       req.body.hint1,
@@ -106,7 +106,7 @@ module.exports = (app, passport) => {
 
       part.on('end', function() {
         console.log(filename + ' Part read complete');
-        ProblemSchema.findOne({ photoName: filename }, (err, problemInfo) => {
+        ProblemSchema.findOne({ imageName: filename }, (err, problemInfo) => {
           // if (err) return res.status(500);
           res.json({ success: true });
         });

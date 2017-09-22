@@ -2,7 +2,7 @@ let mongoose = require('mongoose');
 let problemSchema = new mongoose.Schema({
   title: String,
   number: Number,
-  photoName: String,
+  imageName: String,
   solution: String,
   hint: [ String ],
 });

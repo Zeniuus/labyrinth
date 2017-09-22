@@ -40,7 +40,7 @@ $document.ready(() => {
     axios.post(server_url + '/admin/problems/detail', {
       title: titleInputElem.value,
       number: numberInputElem.value,
-      photoName: photoFile.name,
+      imageName: photoFile.name,
       solution: solutionInputElem.value,
       hint1: hint1InputElem.value,
       hint2: hint2InputElem.value,
