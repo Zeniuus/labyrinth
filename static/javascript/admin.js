@@ -1,6 +1,8 @@
 let $document = $(document);
+let server_url = 'http://localhost:3000';
 
 $document.ready(() => {
+  let problemListElem = document.getElementById('problem_list');
   let titleInputElem = document.getElementById('title_input');
   let numberInputElem = document.getElementById('number_input');
   let photoInputElem = document.getElementById('photo_input');
@@ -9,11 +11,33 @@ $document.ready(() => {
   let hint2InputElem = document.getElementById('hint2_input');
   let hint3InputElem = document.getElementById('hint3_input');
 
+  axios.get(server_url + '/admin/problems')
+  .then((res) => {
+    for (let i = 0; i < res.data.length; i++) {
+      let problemItemElem = document.createElement('div');
+      problemItemElem.innerHTML = `
+        <p>문제 이름 : ${res.data[i].title}</p>
+        <p>문제 번호 : ${res.data[i].number}</p>
+        <p>문제 사진 :</p>
+        <img src="/problems/${res.data[i].photoName}" width="600"/>
+        <p>문제 답 : ${res.data[i].solution}</p>
+        <p>문제 힌트1 : ${res.data[i].hint[0]}</p>
+        <p>문제 힌트2 : ${res.data[i].hint[1]}</p>
+        <p>문제 힌트3 : ${res.data[i].hint[2]}</p>
+        <hr />
+      `
+      problemListElem.appendChild(problemItemElem);
+    }
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+
   $('#new_problem_btn').click(() => {
     let fd = new FormData();
     let photoFile = photoInputElem.files[0];
     fd.append(photoFile.name, photoFile);
-    axios.post('http://localhost:3000/admin/problems/detail', {
+    axios.post(server_url + '/admin/problems/detail', {
       title: titleInputElem.value,
       number: numberInputElem.value,
       photoName: photoFile.name,
@@ -24,9 +48,10 @@ $document.ready(() => {
     })
     .then((res) => {
       console.log('first success');
-      axios.post('http://localhost:3000/admin/problems/photo', fd)
+      axios.post(server_url + '/admin/problems/photo', fd)
       .then((res) => {
         console.log('second success');
+        location.reload();
       })
       .catch((err) => {
         console.log(err);
@@ -35,15 +60,5 @@ $document.ready(() => {
     .catch((err) => {
       console.log(err);
     });
-
-    console.log({
-      title: titleInputElem.value,
-      number: numberInputElem.value,
-      photoName: photoFile.name,
-      solution: solutionInputElem.value,
-      hint1: hint1InputElem.value,
-      hint2: hint2InputElem.value,
-      hint3: hint3InputElem.value,
-    })
   });
 });

@@ -53,6 +53,13 @@ module.exports = (app, passport) => {
     res.render('admin.html');
   });
 
+  app.get('/admin/problems', (req, res) => {
+    ProblemSchema.find({}, (err, problemInfos) => {
+      if (err) return res.status(500);
+      res.json(problemInfos);
+    });
+  });
+
   app.post('/admin/problems/detail', (req, res) => {
     let problemInfo = new ProblemSchema();
     problemInfo.title = req.body.title;
@@ -101,7 +108,7 @@ module.exports = (app, passport) => {
         console.log(filename + ' Part read complete');
         ProblemSchema.findOne({ photoName: filename }, (err, problemInfo) => {
           // if (err) return res.status(500);
-          // res.end({ success: true });
+          res.json({ success: true });
         });
         writeStream.end();
       });
@@ -110,7 +117,6 @@ module.exports = (app, passport) => {
     // all uploads are completed
     form.on('close', function() {
       console.log('Upload complete');
-      // res.status(200).send('Upload complete');
     });
 
     // track progress
