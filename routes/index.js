@@ -96,7 +96,7 @@ module.exports = (app, passport) => {
       }
 
       console.log("Write Streaming file :" + filename);
-      let writeStream = fs.createWriteStream(__dirname + '/../static/problems/' + filename);
+      let writeStream = fs.createWriteStream(__dirname + '/../static/problemImages/' + filename);
       writeStream.filename = filename;
       part.pipe(writeStream);
 
