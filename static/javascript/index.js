@@ -20,7 +20,7 @@ $document.ready(() => {
     .then((res) => {
       sessionStorage.setItem('id', res.data.id);
       sessionStorage.setItem('name', res.data.name);
-      location.reload();
+      // location.reload();
     })
     .catch((err) => {
       document.getElementById('login_failed').style.visibility = 'visible';
