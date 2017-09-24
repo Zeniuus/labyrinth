@@ -3,6 +3,7 @@ let app = express()
 
 let port = 3000;
 let bodyParser = require('body-parser');
+let cookieParser = require('cookie-parser');
 let session = require('express-session');
 let mongoose = require('mongoose');
 let passport = require('passport');
@@ -36,27 +37,24 @@ db.once('open', () => {
 });
 mongoose.connect('mongodb://localhost/labyrinth');
 
-// app.use('/problems', (req, res, next) => {
-//   console.log(req.isAuthenticated);
-//   console.log(req.isAuthenticated());
-//   if (!req.isAuthenticated()) {
-//     console.log('not authenticated');
-//     res.redirect('/')
-//   } else {
-//     console.log('authenticated');
-//     next();
-//   }
-// });
-app.use(express.static('static'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 app.use(session({
-  secret: 'secrettexthere',
-  saveUninitialized: true,
-  resave: true,
+  secret: 'I love apple!',
+  resave: false,
+  saveUninitialized: false
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use('/problemImages', (req, res, next) => {
+  if (!req.isAuthenticated()) {
+    res.redirect('/login')
+  } else {
+    next();
+  }
+});
+app.use(express.static('static'));
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
