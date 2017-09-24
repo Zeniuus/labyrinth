@@ -8,5 +8,14 @@
   </head>
   <body>
     <h1>Hello, labyrinth!</h1>
+    <p>
+      <a href="/problems/1">미궁 시작하기</a>
+    </p>
+    <p>
+      문제 목록
+    </p>
+    <% for (let i = 0; i < problems.length; i++) { %>
+      <span><a href="/problems/<%= problems[i].number %>"><%= problems[i].number %></a></span>
+    <% } %>
   </body>
 </html>

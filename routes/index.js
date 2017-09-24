@@ -54,7 +54,11 @@ module.exports = (app, passport) => {
   });
 
   app.get('/main', (req, res) => {
-    res.render('main.html');
+    ProblemSchema.find({}, (err, problemInfos) => {
+      if (err) return res.status(500);
+      console.log(problemInfos);
+      res.render('main.ejs', { problems: problemInfos });
+    });
   });
 
   app.get('/problems/:number', (req, res) => {
