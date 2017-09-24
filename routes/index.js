@@ -8,7 +8,7 @@ class_num = 26;
 
 module.exports = (app, passport) => {
   app.get('/', (req, res) => {
-    res.render('index.html');
+    res.redirect('/login');
   });
 
   app.get('/users/zeniuus7329', (req, res) => {
@@ -44,9 +44,17 @@ module.exports = (app, passport) => {
     });
   });
 
+  app.get('/login', (req, res) => {
+    res.render('login.html');
+  });
+
   app.post('/login', passport.authenticate('local'), (req, res) => {
     console.log(req.user);
     res.json(req.user);
+  });
+
+  app.get('/main', (req, res) => {
+    res.render('main.html');
   });
 
   app.get('/problems/:number', (req, res) => {
