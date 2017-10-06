@@ -11,7 +11,7 @@ module.exports = (app, passport) => {
     res.redirect('/login');
   });
 
-  app.get('/users/zeniuus7329', (req, res) => {
+  app.get('/users/create', (req, res) => {
     // let currentdate = new Date();
     // let datetime = "Last Sync: " + currentdate.getDate() + "/"
     //                 + (currentdate.getMonth()+1)  + "/"
@@ -42,6 +42,13 @@ module.exports = (app, passport) => {
     userInfo.timer_start = null;
     userInfo.save((err) => {
       if (err) return res.status(500).end('database error');
+      res.end('success!');
+    });
+  });
+
+  app.get('/users/delete', (req, res) => {
+    UserSchema.remove({}, (err) => {
+      if (err) return res.status(500);
       res.end('success!');
     });
   });
