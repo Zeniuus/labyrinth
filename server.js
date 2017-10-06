@@ -54,6 +54,8 @@ app.use('/problemImages', (req, res, next) => {
     next();
   }
 });
+// TODO: /admin route는 admin 계정만 접근 가능하게 하기
+// TODO: /problemImages route는 문제 푼 놈들만 접근 가능하게 하기
 app.use(express.static('static'));
 
 app.set('views', __dirname + '/views');
