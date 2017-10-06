@@ -26,6 +26,7 @@ module.exports = (app, passport) => {
       userInfo.name = `class${i}`;
       userInfo.progress = 0;
       userInfo.last_success = new Date();
+      userInfo.timer_start = null;
       userInfo.save((err) => {
         if (err) return res.status(500).end('database error');
         res.end('success!');
@@ -38,6 +39,7 @@ module.exports = (app, passport) => {
     userInfo.name = 'admin';
     userInfo.progress = 1000;
     userInfo.last_success = new Date();
+    userInfo.timer_start = null;
     userInfo.save((err) => {
       if (err) return res.status(500).end('database error');
       res.end('success!');

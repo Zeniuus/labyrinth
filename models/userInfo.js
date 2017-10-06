@@ -5,6 +5,7 @@ let userSchema = new mongoose.Schema({
   name: String,
   progress: Number,
   last_success: Date,
+  timer_start: Date,
 });
 
 module.exports = mongoose.model('user_info', userSchema);
