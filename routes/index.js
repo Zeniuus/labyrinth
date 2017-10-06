@@ -73,6 +73,8 @@ module.exports = (app, passport) => {
   app.get('/problems/:number', (req, res) => {
     ProblemSchema.findOne({ number: req.params.number }, (err, problemInfo) => {
       if (err) return res.status(500);
+      if (!req.user) return res.redirect('/login');  /* TODO: "로그인이 필요합니다." page로 이동시키기 */
+      if (req.user.progress + 1 < req.params.number) return res.redirect('/main');  /* TODO: "아직 풀 수 없는 문제입니다." page로 이동시키기 */
       res.render('problem.ejs', { problem: problemInfo });
     });
   });
