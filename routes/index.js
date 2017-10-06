@@ -84,8 +84,17 @@ module.exports = (app, passport) => {
     ProblemSchema.findOne({ number: req.params.number, answer: req.body.answer }, (err, problemInfo) => {
       console.log(problemInfo);
       if (err) return res.status(500);
-      if (problemInfo) return res.json({ correct: true });
-      return res.json({ correct: false });
+      if (!problemInfo) return res.json({ correct: false });
+      UserSchema.findOne({ id: req.user.id }, (err, userInfo) => {
+        if (err) return res.status(500);
+        if (!userInfo) return res.status(500);
+        userInfo.progress += 1;
+        userInfo.timer_start = null;
+        userInfo.save((err) => {
+          if (err) return res.status(500);
+          return res.json({ correct: true });
+        });
+      });
     });
   });
 
