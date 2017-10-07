@@ -32,7 +32,9 @@ $document.ready(() => {
           for (let j = 0; j < problemNum; j++) {
             let colElem = document.createElement('td');
             if (j < log.log_start.length) colElem.innerHTML = `${dateToTime(new Date(log.log_start[j]))}<br />`;
+            else colElem.innerHTML = '--:--:--<br />';
             if (j < log.log_end.length) colElem.innerHTML += `${dateToTime(new Date(log.log_end[j]))}`;
+            else colElem.innerHTML += '--:--:--';
             rowElem.appendChild(colElem);
           }
           logTableElem.appendChild(rowElem);
