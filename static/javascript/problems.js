@@ -73,5 +73,5 @@ function dateToTimer(millisec) {
   if (sec == 0) sec = '00';
   else if (sec < 10) sec = '0' + sec;
 
-  return hour + ':' + min + ':' + sec;
+  return `${hour}:${min}:${sec}`;
 }

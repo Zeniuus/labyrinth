@@ -13,13 +13,6 @@ module.exports = (app, passport) => {
   });
 
   app.get('/users/create', (req, res) => {
-    // let currentdate = new Date();
-    // let datetime = "Last Sync: " + currentdate.getDate() + "/"
-    //                 + (currentdate.getMonth()+1)  + "/"
-    //                 + currentdate.getFullYear() + " @ "
-    //                 + currentdate.getHours() + ":"
-    //                 + currentdate.getMinutes() + ":"
-    //                 + currentdate.getSeconds();
     for (let i = 1; i <= class_num; i += 1) {
       let userInfo = new UserSchema();
       userInfo.id = `class${i}`;
