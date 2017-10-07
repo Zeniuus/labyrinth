@@ -80,7 +80,19 @@ module.exports = (app, passport) => {
       if (err) return res.status(500);
       if (!req.user) return res.redirect('/login');  /* TODO: "로그인이 필요합니다." page로 이동시키기 */
       if (req.user.progress + 1 < req.params.number) return res.redirect('/main');  /* TODO: "아직 풀 수 없는 문제입니다." page로 이동시키기 */
-      res.render('problem.ejs', { problem: problemInfo });
+      if (req.user.timer_start == null) {
+        UserSchema.findOne({ id: req.user.id }, (err, userInfo) => {
+          if (err) return res.status(500);
+          if (!userInfo) return res.status(500);
+          userInfo.timer_start = new Date();
+          userInfo.save((err) => {
+            if (err) return res.status(500);
+            res.render('problem.ejs', { problem: problemInfo });
+          });
+        });
+      } else {
+        res.render('problem.ejs', { problem: problemInfo });
+      }
     });
   });
 
