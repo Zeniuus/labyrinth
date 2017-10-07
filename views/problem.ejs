@@ -9,11 +9,16 @@
   <body>
     <div>
       <h1>Hello, labyrinth!</h1>
-      <a href="/main" style="float: right;">go to main</a>
+      <a href="/main" style="float: right">go to main</a>
     </div>
-    <h2><%= problem.title %></h2>
+    <div>
+      <h2><%= problem.title %></h2>
+      <span id="timer" style="float: right"></span>
+    </div>
     <img src="/problemImages/<%= problem.imageName %>" width="800"/>
     <br />
+    <p>힌트</p>
+    <div id="hints"></div>
     <input type="text" id="answer_input" />
     <button type="button" id="submit_btn">제출</button>
   </body>

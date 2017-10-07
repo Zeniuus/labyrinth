@@ -115,6 +115,21 @@ module.exports = (app, passport) => {
     });
   });
 
+  app.get('/problems/:problemNum/hints', (req, res) => {
+    ProblemSchema.findOne({ number: req.params.problemNum }, (err, problemInfo) => {
+      console.log(problemInfo);
+      if (err) return res.status(500);
+      if (!problemInfo) return res.status(500);
+      if (req.params.problemNum != req.user.progress + 1) return res.json({ hints: [] });
+
+      let pastTime = new Date() - new Date(req.user.timer_start);
+      if (pastTime >= 30000) return res.json({ hints: problemInfo.hint });
+      if (pastTime >= 20000) return res.json({ hints: problemInfo.hint.slice(0, 2)});
+      if (pastTime >= 10000) return res.json({ hints: problemInfo.hint.slice(0, 1)});
+      return res.json({ hints: [] });
+    });
+  });
+
   app.get('/admin', (req, res) => {
     res.render('admin.html');
   });
