@@ -53,6 +53,11 @@ module.exports = (app, passport) => {
     });
   });
 
+  app.get('/user', (req, res) => {
+    if (!req.user) return res.json({ user: null });
+    res.json({ user: req.user });
+  });
+
   app.get('/login', (req, res) => {
     res.render('login.html');
   });
