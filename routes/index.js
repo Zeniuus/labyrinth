@@ -8,6 +8,12 @@ let LogSchema = require('./../models/logInfo.js');
 class_num = 26;
 
 module.exports = (app, passport) => {
+  let problemNum = -1;
+  ProblemSchema.find({}, (err, problemInfos) => {
+    if (err) return;
+    problemNum = problemInfos.length;
+  });
+
   app.get('/', (req, res) => {
     res.redirect('/login');
   });
@@ -87,10 +93,11 @@ module.exports = (app, passport) => {
   });
 
   app.get('/problems/:number', (req, res) => {
+    if (req.user.progress + 1 < req.params.number) return res.redirect('/main');  /* TODO: "아직 풀 수 없는 문제입니다." page로 이동시키기 */
+    if (!req.user) return res.redirect('/login');  /* TODO: "로그인이 필요합니다." page로 이동시키기 */
+    if (req.params.number > problemNum) return res.redirect('/congratulations');
     ProblemSchema.findOne({ number: req.params.number }, (err, problemInfo) => {
       if (err) return res.status(500);
-      if (!req.user) return res.redirect('/login');  /* TODO: "로그인이 필요합니다." page로 이동시키기 */
-      if (req.user.progress + 1 < req.params.number) return res.redirect('/main');  /* TODO: "아직 풀 수 없는 문제입니다." page로 이동시키기 */
       if (req.user.timer_start != null) return res.render('problem.ejs', { problem: problemInfo });
       UserSchema.findOne({ id: req.user.id }, (err, userInfo) => {
         if (err) return res.status(500);
@@ -154,6 +161,11 @@ module.exports = (app, passport) => {
       if (pastTime >= 10000) return res.json({ hints: problemInfo.hint.slice(0, 1)});
       return res.json({ hints: [] });
     });
+  });
+
+  app.get('/congratulations', (req, res) => {
+    if (req.user.progress != problemNum) return res.redirect('/main');  /* TODO: "아직 문제를 다 풀지 못하셨습니다." page로 이동 */
+    res.render('ending.html');
   });
 
   app.get('/admin/log', (req, res) => {
