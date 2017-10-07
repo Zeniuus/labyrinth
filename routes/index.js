@@ -3,6 +3,7 @@ let fs = require('fs');
 
 let UserSchema = require('./../models/userInfo.js');
 let ProblemSchema = require('./../models/problemInfo.js');
+let LogSchema = require('./../models/logInfo.js');
 
 class_num = 26;
 
@@ -29,7 +30,14 @@ module.exports = (app, passport) => {
       userInfo.timer_start = null;
       userInfo.save((err) => {
         if (err) return res.status(500).end('database error');
-        res.end('success!');
+        let logInfo = new LogSchema();
+        logInfo.id = userInfo.id;
+        logInfo.log_start = [];
+        logInfo.log_end = [];
+        logInfo.save((err) => {
+          if (err) return res.status(500).end('database error');
+          res.end('success!');
+        });
       });
     }
 
@@ -42,14 +50,24 @@ module.exports = (app, passport) => {
     userInfo.timer_start = null;
     userInfo.save((err) => {
       if (err) return res.status(500).end('database error');
-      res.end('success!');
+      let logInfo = new LogSchema();
+      logInfo.id = userInfo.id;
+      logInfo.log_start = [];
+      logInfo.log_end = [];
+      logInfo.save((err) => {
+        if (err) return res.status(500).end('database error');
+        res.end('success!');
+      });
     });
   });
 
   app.get('/users/delete', (req, res) => {
     UserSchema.remove({}, (err) => {
       if (err) return res.status(500);
-      res.end('success!');
+      LogSchema.remove({}, (err) => {
+        if (err) return res.status(500);
+        res.end('success!');
+      });
     });
   });
 
@@ -80,36 +98,51 @@ module.exports = (app, passport) => {
       if (err) return res.status(500);
       if (!req.user) return res.redirect('/login');  /* TODO: "로그인이 필요합니다." page로 이동시키기 */
       if (req.user.progress + 1 < req.params.number) return res.redirect('/main');  /* TODO: "아직 풀 수 없는 문제입니다." page로 이동시키기 */
-      if (req.user.timer_start == null) {
-        UserSchema.findOne({ id: req.user.id }, (err, userInfo) => {
+      if (req.user.timer_start != null) return res.render('problem.ejs', { problem: problemInfo });
+      UserSchema.findOne({ id: req.user.id }, (err, userInfo) => {
+        if (err) return res.status(500);
+        if (!userInfo) return res.status(500);
+        userInfo.timer_start = new Date();
+        userInfo.save((err) => {
           if (err) return res.status(500);
-          if (!userInfo) return res.status(500);
-          userInfo.timer_start = new Date();
-          userInfo.save((err) => {
+          LogSchema.findOne({ id: req.user.id }, (err, logInfo) => {
             if (err) return res.status(500);
-            res.render('problem.ejs', { problem: problemInfo });
+            if (logInfo.log_start.length >= req.params.number) return res.render('problem.ejs', { problem: problemInfo });
+            logInfo.log_start.push(userInfo.timer_start);
+            logInfo.save((err) => {
+              if (err) return res.status(500);
+              res.render('problem.ejs', { problem: problemInfo });
+            });
           });
         });
-      } else {
-        res.render('problem.ejs', { problem: problemInfo });
-      }
+      });
     });
   });
 
   app.post('/problems/:number/answer', (req, res) => {
     console.log(req.params.number, req.body.answer);
+    if (req.params.number > req.user.progress + 1) return res.json({ correct: false });
     ProblemSchema.findOne({ number: req.params.number, answer: req.body.answer }, (err, problemInfo) => {
       console.log(problemInfo);
       if (err) return res.status(500);
       if (!problemInfo) return res.json({ correct: false });
+      if (req.params.number <= req.user.progress) return res.json({ correct: true });
       UserSchema.findOne({ id: req.user.id }, (err, userInfo) => {
         if (err) return res.status(500);
         if (!userInfo) return res.status(500);
-        userInfo.progress += 1;
+        userInfo.progress = req.params.number;
         userInfo.timer_start = null;
         userInfo.save((err) => {
           if (err) return res.status(500);
-          return res.json({ correct: true });
+          LogSchema.findOne({ id: req.user.id }, (err, logInfo) => {
+            if (err) return res.status(500);
+            if (logInfo.log_end.length >= req.params.number) return res.json({ correct: true });
+            logInfo.log_end.push(new Date());
+            logInfo.save((err) => {
+              if (err) return res.status(500);
+              return res.json({ correct: true });
+            });
+          });
         });
       });
     });
@@ -130,8 +163,22 @@ module.exports = (app, passport) => {
     });
   });
 
-  app.get('/admin', (req, res) => {
-    res.render('admin.html');
+  app.get('/admin/log', (req, res) => {
+    ProblemSchema.find({}, (err, problemInfos) => {
+      if (err) return res.status(500);
+      res.render('admin_log.ejs', { problems: problemInfos });
+    });
+  });
+
+  app.get('/admin/logs', (req, res) => {
+    LogSchema.find({}, (err, logInfos) => {
+      if (err) return res.status(500);
+      res.json(logInfos);
+    });
+  });
+
+  app.get('/admin/problem', (req, res) => {
+    res.render('admin_problem.html');
   });
 
   app.get('/admin/problems', (req, res) => {
