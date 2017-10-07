@@ -10,10 +10,10 @@
     <h1>Hello, labyrinth!</h1>
     <p>
       <%# TODO: href를 user의 progress에 따라 다르게 로딩하기%>
-      <a href="/problems/1">미궁 시작하기</a>
+      <a href="<%= currProblemUrl %>">현재 문제로 가기</a>
     </p>
     <p>
-      문제 목록
+      이전 문제 목록
     </p>
     <%# TODO: 이전 문제들을 user의 progress에 따라 다르게 로딩하기%>
     <% for (let i = 0; i < problems.length; i++) { %>

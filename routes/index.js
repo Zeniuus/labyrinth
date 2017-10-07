@@ -88,7 +88,10 @@ module.exports = (app, passport) => {
     ProblemSchema.find({}, (err, problemInfos) => {
       if (err) return res.status(500);
       console.log(problemInfos);
-      res.render('main.ejs', { problems: problemInfos });
+      res.render('main.ejs', {
+        problems: problemInfos.slice(0, req.user.progress),
+        currProblemUrl: req.user.progress == problemNum ? '/congratulations' : `/problems/${req.user.progress + 1}`,
+      });
     });
   });
 
