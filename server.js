@@ -49,9 +49,20 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use('/static/problemImages', (req, res, next) => {
   if (!req.isAuthenticated()) {
-    res.redirect('/login')
+    res.redirect('/login');
   } else {
     next();
+  }
+});
+app.use('/admin', (req, res, next) => {
+  if (!req.isAuthenticated()) {
+    res.redirect('/login');
+  } else {
+    if (req.user.id !== 'admin') {
+      res.redirect('/main')  // TODO: "권한이 없습니다." page로 이동
+    } else {
+      next();
+    }
   }
 });
 // TODO: /admin route는 admin 계정만 접근 가능하게 하기
