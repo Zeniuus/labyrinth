@@ -59,9 +59,10 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use('/static/problemImages', (req, res, next) => {
-  if (!req.isAuthenticated()) {
-    res.redirect('/login');
+app.use('/', (req, res, next) => {
+  let urlTokens = req.originalUrl.split('/');
+  if (!req.user && !(urlTokens[1] === 'static' && urlTokens[2] === 'javascript') && req.originalUrl !== '/login') {
+    res.redirect('/login')
   } else {
     next();
   }
@@ -96,10 +97,6 @@ app.use('/admin', (req, res, next) => {
     }
   }
 });
-// TODO: /admin route는 admin 계정만 접근 가능하게 하기
-// TODO: /problemImages route는 문제 푼 놈들만 접근 가능하게 하기
-// TODO: /problems/:problemNum/hints/:hintNum은 시간 지난 놈들만 접근 가능하게 하기
-// TODO: 로그인 안한 유저는 /login 이외의 페이지는 접근 불가능하게 하기
 app.use('/static', express.static(__dirname + '/static'));
 
 app.set('views', __dirname + '/views');

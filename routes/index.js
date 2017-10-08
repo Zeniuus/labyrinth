@@ -15,7 +15,7 @@ module.exports = (app, passport) => {
   });
 
   app.get('/', (req, res) => {
-    res.redirect('/login');
+    res.redirect('/main');
   });
 
   app.get('/users/create', (req, res) => {
