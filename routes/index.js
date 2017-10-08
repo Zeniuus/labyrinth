@@ -9,9 +9,14 @@ class_num = 26;
 
 module.exports = (app, passport) => {
   let problemNum = -1;
+  let problemList = [];
   ProblemSchema.find({}, (err, problemInfos) => {
     if (err) return;
-    problemNum = problemInfos.length;
+    problemList = problemInfos.sort((p1, p2) => {
+      if (p1.number < p2.number) return -1;
+      if (p1.number == p2.number) return 0;
+      return 1;
+    });
   });
 
   app.get('/', (req, res) => {
@@ -83,18 +88,15 @@ module.exports = (app, passport) => {
   });
 
   app.get('/main', (req, res) => {
-    ProblemSchema.find({}, (err, problemInfos) => {
-      if (err) return res.status(500);
-      res.render('main.ejs', {
-        problems: problemInfos.slice(0, req.user.progress),
-        currProblemUrl: req.user.progress == problemNum ? '/congratulations' : `/problems/${req.user.progress + 1}`,
-      });
+    res.render('main.ejs', {
+      problems: problemList.slice(0, req.user.progress),
+      currProblemUrl: req.user.progress == problemList.length ? '/congratulations' : `/problems/${req.user.progress + 1}`,
     });
   });
 
   app.get('/problems/:number', (req, res) => {
     if (req.user.progress + 1 < req.params.number) return res.redirect('/not_allowed');
-    if (req.params.number > problemNum) return res.redirect('/congratulations');
+    if (req.params.number > problemList.length) return res.redirect('/congratulations');
     ProblemSchema.findOne({ number: req.params.number }, (err, problemInfo) => {
       if (err) return res.status(500);
       if (req.user.timer_start != null) return res.render('problem.ejs', { problem: problemInfo });
@@ -160,7 +162,7 @@ module.exports = (app, passport) => {
   });
 
   app.get('/congratulations', (req, res) => {
-    if (req.user.progress != problemNum) return res.redirect('/not_allowed');
+    if (req.user.progress != problemList.length) return res.redirect('/not_allowed');
     res.render('ending.html');
   });
 
@@ -169,10 +171,7 @@ module.exports = (app, passport) => {
   });
 
   app.get('/admin/log', (req, res) => {
-    ProblemSchema.find({}, (err, problemInfos) => {
-      if (err) return res.status(500);
-      res.render('admin_log.ejs', { problems: problemInfos });
-    });
+    res.render('admin_log.ejs', { problems: problemList });
   });
 
   app.get('/admin/logs', (req, res) => {
@@ -187,10 +186,7 @@ module.exports = (app, passport) => {
   });
 
   app.get('/admin/problems', (req, res) => {
-    ProblemSchema.find({}, (err, problemInfos) => {
-      if (err) return res.status(500);
-      res.json(problemInfos);
-    });
+    res.json(problemList);
   });
 
   app.post('/admin/problems/detail', (req, res) => {
@@ -240,7 +236,9 @@ module.exports = (app, passport) => {
       part.on('end', function() {
         console.log(filename + ' Part read complete');
         ProblemSchema.findOne({ imageName: filename }, (err, problemInfo) => {
-          res.json({ success: true });
+          if (err) return res.status(500);
+          if (!problemInfo) return res.json({ success: false });
+          updateProblemList(res);
         });
         writeStream.end();
       });
@@ -262,7 +260,19 @@ module.exports = (app, passport) => {
   app.delete('/admin/problems/:title', (req, res) => {
     ProblemSchema.remove({ title: req.params.title }, (err) => {
       if (err) return res.status(500);
-      res.json({ success: true });
+      updateProblemList(res);
     });
   });
+
+  function updateProblemList(res) {
+    ProblemSchema.find({}, (err, problemInfos) => {
+      if (err) return res.status(500);
+      problemList = problemInfos.sort((p1, p2) => {
+        if (p1.number < p2.number) return -1;
+        if (p1.number == p2.number) return 0;
+        return 1;
+      });
+      res.json({ success: true });
+    });
+  }
 }

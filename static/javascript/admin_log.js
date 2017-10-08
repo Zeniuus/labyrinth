@@ -17,7 +17,7 @@ $document.ready(() => {
         titleRowElem.innerHTML = '<th></th>'
         for (let i = 0; i < problemNum; i++) {
           let titleColElem = document.createElement('th');
-          titleColElem.innerHTML = `problem ${i}`;
+          titleColElem.innerHTML = `problem ${i + 1}`;
           titleRowElem.appendChild(titleColElem);
         }
         logTableElem.appendChild(titleRowElem);

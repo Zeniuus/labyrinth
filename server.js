@@ -31,21 +31,9 @@ passport.deserializeUser((id, done) => {
 });
 
 let db = mongoose.connection;
-let problemList = [];
 db.on('error', console.error);
 db.once('open', () => {
   console.log('connected to mongod server');
-  require('./models/problemInfo.js').find({}, (err, problemInfos) => {
-    if (err) {
-      console.log(err);
-      return;
-    }
-    problemList = problemInfos.sort((p1, p2) => {
-      if (p1.number < p2.number) return -1;
-      if (p1.number == p2.number) return 0;
-      return 1;
-    });
-  });
 });
 mongoose.connect('mongodb://localhost/labyrinth');
 
@@ -70,17 +58,29 @@ app.use('/', (req, res, next) => {
 app.use('/static/problemImages/:imgName', (req, res, next) => {
   const imgName = req.params.imgName;
   const progress = req.user.progress;
-  for (let i = 0; i < problemList.length; i++) {
-    if (problemList[i].imageName === imgName) {
-      if (progress + 1 < problemList[i].number) {
-        res.end('Go away, Anna!');
-        return;
-      } else {
-        next();
-      }
-      break;
+  require('./models/problemInfo.js').find({}, (err, problemInfos) => {
+    if (err) {
+      console.log(err);
+      return;
     }
-  }
+    problemInfos.sort((p1, p2) => {
+      if (p1.number < p2.number) return -1;
+      if (p1.number == p2.number) return 0;
+      return 1;
+    });
+    
+    for (let i = 0; i < problemInfos.length; i++) {
+      if (problemInfos[i].imageName === imgName) {
+        if (progress + 1 < problemInfos[i].number) {
+          res.end('Go away, Anna!');
+          return;
+        } else {
+          next();
+        }
+        break;
+      }
+    }
+  });
 });
 app.use('/admin', (req, res, next) => {
   if (req.user.id !== 'admin') {
