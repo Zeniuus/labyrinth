@@ -84,7 +84,7 @@ app.use('/static/problemImages/:imgName', (req, res, next) => {
 });
 app.use('/admin', (req, res, next) => {
   if (req.user.id !== 'admin') {
-    res.redirect('/main')  // TODO: "권한이 없습니다." page로 이동
+    res.redirect('/not_allowed');
   } else {
     next();
   }

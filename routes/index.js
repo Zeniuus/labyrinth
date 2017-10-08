@@ -93,7 +93,7 @@ module.exports = (app, passport) => {
   });
 
   app.get('/problems/:number', (req, res) => {
-    if (req.user.progress + 1 < req.params.number) return res.redirect('/main');  /* TODO: "아직 풀 수 없는 문제입니다." page로 이동시키기 */
+    if (req.user.progress + 1 < req.params.number) return res.redirect('/not_allowed');
     if (req.params.number > problemNum) return res.redirect('/congratulations');
     ProblemSchema.findOne({ number: req.params.number }, (err, problemInfo) => {
       if (err) return res.status(500);
@@ -160,8 +160,12 @@ module.exports = (app, passport) => {
   });
 
   app.get('/congratulations', (req, res) => {
-    if (req.user.progress != problemNum) return res.redirect('/main');  /* TODO: "아직 문제를 다 풀지 못하셨습니다." page로 이동 */
+    if (req.user.progress != problemNum) return res.redirect('/not_allowed');
     res.render('ending.html');
+  });
+
+  app.get('/not_allowed', (req, res) => {
+    res.render('not_allowed.html');
   });
 
   app.get('/admin/log', (req, res) => {
