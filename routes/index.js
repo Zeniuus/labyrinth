@@ -258,4 +258,11 @@ module.exports = (app, passport) => {
 
     form.parse(req);
   });
+
+  app.delete('/admin/problems/:title', (req, res) => {
+    ProblemSchema.remove({ title: req.params.title }, (err) => {
+      if (err) return res.status(500);
+      res.json({ success: true });
+    });
+  });
 }

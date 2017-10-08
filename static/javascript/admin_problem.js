@@ -12,10 +12,18 @@ $document.ready(() => {
 
   axios.get('/admin/problems')
   .then((res) => {
+    res.data.sort((p1, p2) => {
+      if (p1.number < p2.number) return -1;
+      if (p1.number == p2.number) return 0;
+      return 1;
+    });
     for (let i = 0; i < res.data.length; i++) {
       let problemItemElem = document.createElement('div');
       problemItemElem.innerHTML = `
-        <p>문제 이름 : ${res.data[i].title}</p>
+        <div>
+          <span>문제 이름 : ${res.data[i].title}</span>
+          <button onclick="deleteProblem('${res.data[i].title}')" style="float: right">삭제</button>
+        </div>
         <p>문제 번호 : ${res.data[i].number}</p>
         <p>문제 사진 :</p>
         <img src="/static/problemImages/${res.data[i].imageName}" width="600"/>
@@ -71,3 +79,13 @@ $document.ready(() => {
     });
   });
 });
+
+function deleteProblem(title) {
+  axios.delete(`/admin/problems/${title}`)
+  .then((res) => {
+    window.location.reload();
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+}
