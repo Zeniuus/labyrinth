@@ -68,33 +68,25 @@ app.use('/', (req, res, next) => {
   }
 });
 app.use('/static/problemImages/:imgName', (req, res, next) => {
-  if (!req.user) {
-    res.redirect('/login');
-  } else {
-    const imgName = req.params.imgName;
-    const progress = req.user.progress;
-    for (let i = 0; i < problemList.length; i++) {
-      if (problemList[i].imageName === imgName) {
-        if (progress + 1 < problemList[i].number) {
-          res.end('Go away, Anna!');
-          return;
-        } else {
-          next();
-        }
-        break;
+  const imgName = req.params.imgName;
+  const progress = req.user.progress;
+  for (let i = 0; i < problemList.length; i++) {
+    if (problemList[i].imageName === imgName) {
+      if (progress + 1 < problemList[i].number) {
+        res.end('Go away, Anna!');
+        return;
+      } else {
+        next();
       }
+      break;
     }
   }
 });
 app.use('/admin', (req, res, next) => {
-  if (!req.isAuthenticated()) {
-    res.redirect('/login');
+  if (req.user.id !== 'admin') {
+    res.redirect('/main')  // TODO: "권한이 없습니다." page로 이동
   } else {
-    if (req.user.id !== 'admin') {
-      res.redirect('/main')  // TODO: "권한이 없습니다." page로 이동
-    } else {
-      next();
-    }
+    next();
   }
 });
 app.use('/static', express.static(__dirname + '/static'));
