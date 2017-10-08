@@ -18,7 +18,7 @@ $document.ready(() => {
         <p>문제 이름 : ${res.data[i].title}</p>
         <p>문제 번호 : ${res.data[i].number}</p>
         <p>문제 사진 :</p>
-        <img src="/problemImages/${res.data[i].imageName}" width="600"/>
+        <img src="/static/problemImages/${res.data[i].imageName}" width="600"/>
         <p>문제 답 : ${res.data[i].answer}</p>
         <p>문제 힌트1 : ${res.data[i].hint[0]}</p>
         <p>문제 힌트2 : ${res.data[i].hint[1]}</p>
