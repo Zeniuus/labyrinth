@@ -71,7 +71,6 @@ module.exports = (app, passport) => {
   });
 
   app.get('/user', (req, res) => {
-    if (!req.user) return res.json({ user: null });
     res.json({ user: req.user });
   });
 
@@ -80,14 +79,12 @@ module.exports = (app, passport) => {
   });
 
   app.post('/login', passport.authenticate('local'), (req, res) => {
-    console.log(req.user);
     res.json(req.user);
   });
 
   app.get('/main', (req, res) => {
     ProblemSchema.find({}, (err, problemInfos) => {
       if (err) return res.status(500);
-      console.log(problemInfos);
       res.render('main.ejs', {
         problems: problemInfos.slice(0, req.user.progress),
         currProblemUrl: req.user.progress == problemNum ? '/congratulations' : `/problems/${req.user.progress + 1}`,
@@ -97,7 +94,6 @@ module.exports = (app, passport) => {
 
   app.get('/problems/:number', (req, res) => {
     if (req.user.progress + 1 < req.params.number) return res.redirect('/main');  /* TODO: "아직 풀 수 없는 문제입니다." page로 이동시키기 */
-    if (!req.user) return res.redirect('/login');  /* TODO: "로그인이 필요합니다." page로 이동시키기 */
     if (req.params.number > problemNum) return res.redirect('/congratulations');
     ProblemSchema.findOne({ number: req.params.number }, (err, problemInfo) => {
       if (err) return res.status(500);
@@ -123,10 +119,8 @@ module.exports = (app, passport) => {
   });
 
   app.post('/problems/:number/answer', (req, res) => {
-    console.log(req.params.number, req.body.answer);
     if (req.params.number > req.user.progress + 1) return res.json({ correct: false });
     ProblemSchema.findOne({ number: req.params.number, answer: req.body.answer }, (err, problemInfo) => {
-      console.log(problemInfo);
       if (err) return res.status(500);
       if (!problemInfo) return res.json({ correct: false });
       if (req.params.number <= req.user.progress) return res.json({ correct: true });
@@ -153,7 +147,6 @@ module.exports = (app, passport) => {
 
   app.get('/problems/:problemNum/hints', (req, res) => {
     ProblemSchema.findOne({ number: req.params.problemNum }, (err, problemInfo) => {
-      console.log(problemInfo);
       if (err) return res.status(500);
       if (!problemInfo) return res.status(500);
       if (req.params.problemNum != req.user.progress + 1) return res.json({ hints: [] });
@@ -198,7 +191,6 @@ module.exports = (app, passport) => {
 
   app.post('/admin/problems/detail', (req, res) => {
     let problemInfo = new ProblemSchema();
-    console.log(req.body);
     problemInfo.title = req.body.title;
     problemInfo.number = req.body.number;
     problemInfo.imageName = req.body.imageName;
