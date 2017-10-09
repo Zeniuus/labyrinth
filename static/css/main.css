@@ -1,0 +1,28 @@
+body {
+  color: #ffffff;
+  background-color: #000000;
+  text-align: center;
+}
+
+h1 {
+  margin-top: 100px;
+  text-align: center;
+}
+
+p {
+  margin-top: 100px;
+  font-size: 24px;
+}
+
+a:link, :visited {
+  color: #ff0000;
+}
+
+#to_current_problem {
+  margin-top: 100px;
+  font-size: 32px;
+}
+
+#past_problem_list {
+  font-size: 20px;
+}
