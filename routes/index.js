@@ -262,9 +262,16 @@ module.exports = (app, passport) => {
   });
 
   app.delete('/admin/problems/:title', (req, res) => {
-    ProblemSchema.remove({ title: req.params.title }, (err) => {
+    ProblemSchema.findOne({ title: req.params.title }, (err, problemInfo) => {
       if (err) return res.status(500);
-      updateProblemList(res);
+      if (!problemInfo) return res.json({ success: false });
+      ProblemSchema.remove({ title: req.params.title }, (err) => {
+        if (err) return res.status(500);
+        fs.unlink(__dirname + `/../static/problemImages/${problemInfo.imageName}`, (err) => {
+          if (err) console.log(err);
+          updateProblemList(res);
+        });
+      });
     });
   });
 
