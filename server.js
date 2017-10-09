@@ -65,10 +65,14 @@ app.use('/static/problemImages/:imgName', (req, res, next) => {
     }
     problemInfos.sort((p1, p2) => {
       if (p1.number < p2.number) return -1;
-      if (p1.number == p2.number) return 0;
+      if (p1.number == p2.number) {
+        if (p1.title < p2.title) return -1;
+        if (p1.title > p2.title) return 1;
+        return 0;
+      }
       return 1;
     });
-    
+
     for (let i = 0; i < problemInfos.length; i++) {
       if (problemInfos[i].imageName === imgName) {
         if (progress + 1 < problemInfos[i].number) {

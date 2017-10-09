@@ -14,7 +14,11 @@ module.exports = (app, passport) => {
     if (err) return;
     problemList = problemInfos.sort((p1, p2) => {
       if (p1.number < p2.number) return -1;
-      if (p1.number == p2.number) return 0;
+      if (p1.number == p2.number) {
+        if (p1.title < p2.title) return -1;
+        if (p1.title > p2.title) return 1;
+        return 0;
+      }
       return 1;
     });
   });
@@ -269,7 +273,11 @@ module.exports = (app, passport) => {
       if (err) return res.status(500);
       problemList = problemInfos.sort((p1, p2) => {
         if (p1.number < p2.number) return -1;
-        if (p1.number == p2.number) return 0;
+        if (p1.number == p2.number) {
+          if (p1.title < p2.title) return -1;
+          if (p1.title > p2.title) return 1;
+          return 0;
+        }
         return 1;
       });
       res.json({ success: true });
