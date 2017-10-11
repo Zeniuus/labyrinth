@@ -71,16 +71,6 @@ $document.ready(() => {
     .catch((err) => {
       console.log(err);
     });
-
-    console.log({
-      title: titleInputElem.value,
-      number: numberInputElem.value,
-      imageName: imageFile.name,
-      answer: answerInputElem.value,
-      hint1: hint1InputElem.value,
-      hint2: hint2InputElem.value,
-      hint3: hint3InputElem.value,
-    });
   });
 });
 
