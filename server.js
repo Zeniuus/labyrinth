@@ -86,6 +86,37 @@ app.use('/static/problemImages/:imgName', (req, res, next) => {
     }
   });
 });
+app.use('/static/storyImages/:imgName', (req, res, next) => {
+  const imgName = req.params.imgName;
+  const progress = req.user.progress;
+  require('./models/storyInfo.js').find({}, (err, storyInfos) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    storyInfos.sort((p1, p2) => {
+      if (p1.number < p2.number) return -1;
+      if (p1.number == p2.number) {
+        if (p1.title < p2.title) return -1;
+        if (p1.title > p2.title) return 1;
+        return 0;
+      }
+      return 1;
+    });
+
+    for (let i = 0; i < storyInfos.length; i++) {
+      if (storyInfos[i].imageName === imgName) {
+        if (progress + 1 < storyInfos[i].number) {
+          res.end('Go away, Anna!');
+          return;
+        } else {
+          next();
+        }
+        break;
+      }
+    }
+  });
+});
 app.use('/admin', (req, res, next) => {
   if (req.user.id !== 'admin') {
     res.redirect('/not_allowed');

@@ -1,3 +1,5 @@
 node_modules/
 static/problemImages/*
 !static/problemImages/.gitkeep
+static/storyImages/*
+!static/storyImages/.gitkeep

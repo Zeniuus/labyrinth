@@ -3,16 +3,31 @@ let fs = require('fs');
 
 let UserSchema = require('./../models/userInfo.js');
 let ProblemSchema = require('./../models/problemInfo.js');
+let StorySchema = require('./../models/storyInfo.js');
 let LogSchema = require('./../models/logInfo.js');
 
 class_num = 26;
 
 module.exports = (app, passport) => {
-  let problemNum = -1;
   let problemList = [];
+  let storyList = [];
+
   ProblemSchema.find({}, (err, problemInfos) => {
     if (err) return;
     problemList = problemInfos.sort((p1, p2) => {
+      if (p1.number < p2.number) return -1;
+      if (p1.number == p2.number) {
+        if (p1.title < p2.title) return -1;
+        if (p1.title > p2.title) return 1;
+        return 0;
+      }
+      return 1;
+    });
+  });
+
+  StorySchema.find({}, (err, storyInfos) => {
+    if (err) return;
+    storyList = storyInfos.sort((p1, p2) => {
       if (p1.number < p2.number) return -1;
       if (p1.number == p2.number) {
         if (p1.title < p2.title) return -1;
@@ -92,9 +107,13 @@ module.exports = (app, passport) => {
   });
 
   app.get('/main', (req, res) => {
+    let url = '';
+    if (req.user.progress === problemList.length) url = '/congratulations';
+    else if (req.user.timer_start === null) url = `/stories/${req.user.progress}`;
+    else url = `problems/${req.user.progress + 1}`;
     res.render('main.ejs', {
       problems: problemList.slice(0, req.user.progress),
-      currProblemUrl: req.user.progress == problemList.length ? '/congratulations' : `/problems/${req.user.progress + 1}`,
+      currProblemUrl: url,
     });
   });
 
@@ -162,6 +181,14 @@ module.exports = (app, passport) => {
       if (pastTime >= 20000) return res.json({ hints: problemInfo.hint.slice(0, 2)});
       if (pastTime >= 10000) return res.json({ hints: problemInfo.hint.slice(0, 1)});
       return res.json({ hints: [] });
+    });
+  });
+
+  app.get('/stories/:number', (req, res) => {
+    if (req.user.progress < req.params.number) return res.redirect('/not_allowed');
+    StorySchema.findOne({ number: req.params.number }, (err, storyInfo) => {
+      if (err) return res.status(500);
+      res.render('story.ejs', { story: storyInfo });
     });
   });
 
@@ -275,10 +302,94 @@ module.exports = (app, passport) => {
     });
   });
 
-  function updateProblemList(res) {
-    ProblemSchema.find({}, (err, problemInfos) => {
+  app.get('/admin/story', (req, res) => {
+    res.render('admin_story.html');
+  });
+
+  app.get('/admin/stories', (req, res) => {
+    res.json(storyList);
+  });
+
+  app.post('/admin/stories/detail', (req, res) => {
+    let storyInfo = new StorySchema();
+    storyInfo.title = req.body.title;
+    storyInfo.number = req.body.number;
+    storyInfo.imageName = req.body.imageName;
+    storyInfo.save((err) => {
       if (err) return res.status(500);
-      problemList = problemInfos.sort((p1, p2) => {
+      res.end(null);
+    });
+  });
+
+  app.post('/admin/stories/image', (req, res) => {
+    let form = new multiparty.Form();
+    // get field name & value
+    form.on('field', function(name, value) {
+      console.log('normal field / name = ' + name + ' , value = ' + value);
+    });
+
+    // file upload handling
+    form.on('part', function(part) {
+      let filename;
+      let size;
+      if (part.filename) {
+        filename = part.filename;
+        size = part.byteCount;
+      } else {
+        part.resume();
+      }
+
+      console.log("Write Streaming file :" + filename);
+      let writeStream = fs.createWriteStream(__dirname + '/../static/storyImages/' + filename);
+      writeStream.filename = filename;
+      part.pipe(writeStream);
+
+      part.on('data', function(chunk) {
+        console.log(filename + ' read ' + chunk.length + 'bytes');
+      });
+
+      part.on('end', function() {
+        console.log(filename + ' Part read complete');
+        StorySchema.findOne({ imageName: filename }, (err, storyInfo) => {
+          if (err) return res.status(500);
+          if (!storyInfo) return res.json({ success: false });
+          updateStoryList(res);
+        });
+        writeStream.end();
+      });
+    });
+
+    // all uploads are completed
+    form.on('close', function() {
+      console.log('Upload complete');
+    });
+
+    // track progress
+    form.on('progress', function(byteRead,byteExpected) {
+      console.log(' Reading total  ' + byteRead + '/' + byteExpected);
+    });
+
+    form.parse(req);
+  });
+
+  app.delete('/admin/stories/:title', (req, res) => {
+    StorySchema.findOne({ title: req.params.title }, (err, storyInfo) => {
+      if (err) return res.status(500);
+      if (!storyInfo) return res.json({ success: false });
+      StorySchema.remove({ title: req.params.title }, (err) => {
+        if (err) return res.status(500);
+        fs.unlink(__dirname + `/../static/storyImages/${storyInfo.imageName}`, (err) => {
+          if (err) console.log(err);
+          updateStoryList(res);
+        });
+      });
+    });
+  });
+
+  function updateStoryList(res) {
+    StorySchema.find({}, (err, storyInfos) => {
+      if (err) return res.status(500);
+      storyList = storyInfos.sort((p1, p2) => {
         if (p1.number < p2.number) return -1;
         if (p1.number == p2.number) {
           if (p1.title < p2.title) return -1;

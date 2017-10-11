@@ -1,0 +1,18 @@
+<html>
+  <head>
+    <title>Labyrinth</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.2/axios.js"></script>
+    <!-- <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30=" crossorigin="anonymous"></script> -->
+    <link rel="stylesheet" type="text/css" href="/static/css/story.css" />
+  </head>
+  <body>
+    <div class="right_align_wrapper">
+      <a href="/main">go to main</a>
+    </div>
+    <h1><%= story.title %></h1>
+    <img src="/static/storyImages/<%= story.imageName %>" width="800"/>
+    <br />
+    <a href="/problems/<%= story.number + 1 %>">다음으로</button>
+  </body>
+</html>

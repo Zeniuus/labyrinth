@@ -1,0 +1,30 @@
+<html>
+  <head>
+    <title>Labyrinth</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.2/axios.js"></script>
+    <script src='/static/javascript/admin_story.js'></script>
+  </head>
+  <body>
+    <h1>Hello, labyrinth!</h1>
+    <h2>새 스토리 만들기</h2>
+    <form action="/admin/stories" method="post">
+      <div>
+        <label for="name">제목</label>
+        <input type="text" id="title_input" name="title" />
+      </div>
+      <div>
+        <label for="name">번호</label>
+        <input type="number" id="number_input" name="number" />
+      </div>
+      <div>
+        <label for="name">사진 파일</label>
+        <input type="file" id="image_input" name="image" />
+      </div>
+    </form>
+    <button id="new_story_btn">스토리 만들기</button>
+    <hr />
+    <div id="story_list">
+    </div>
+  </body>
+</html>
