@@ -39,7 +39,7 @@ $document.ready(() => {
       answer: answerInputElem.value
     })
     .then((res) => {
-      if (res.data.correct) window.location.replace('/problems/' + (Number(problemNum) + 1));
+      if (res.data.correct) window.location.replace('/stories/' + Number(problemNum));
       else window.location.replace('/problems/' + problemNum);
     })
     .catch((err) => {
