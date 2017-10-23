@@ -20,6 +20,14 @@
         <span><a href="/problems/<%= problems[i].number %>"><%= problems[i].number %></a></span>
       <% } %>
     </div>
+    <p>
+      이전 스토리 목록
+    </p>
+    <div id="past_story_list">
+      <% for (let i = 0; i < stories.length; i++) { %>
+        <span><a href="/stories/<%= stories[i].number %>"><%= stories[i].number %></a></span>
+      <% } %>
+    </div>
     <div id="footer">
       <span>Created by 새내기프로그램디자이너 & SPARCS</span>
     </div>
