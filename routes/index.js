@@ -122,7 +122,7 @@ module.exports = (app, passport) => {
     if (req.params.number > problemList.length) return res.redirect('/congratulations');
     ProblemSchema.findOne({ number: req.params.number }, (err, problemInfo) => {
       if (err) return res.status(500);
-      if (req.user.timer_start != null) return res.render('problem.ejs', { problem: problemInfo });
+      if (req.user.progress >= req.params.number || req.user.timer_start != null) return res.render('problem.ejs', { problem: problemInfo });
       UserSchema.findOne({ id: req.user.id }, (err, userInfo) => {
         if (err) return res.status(500);
         if (!userInfo) return res.status(500);
