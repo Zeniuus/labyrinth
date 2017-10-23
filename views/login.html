@@ -5,16 +5,20 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.2/axios.js"></script>
     <!-- <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30=" crossorigin="anonymous"></script> -->
     <script src='/static/javascript/login.js'></script>
+    <link rel="stylesheet" type="text/css" href="/static/css/login.css" />
   </head>
   <body>
     <h1>Hello, labyrinth!</h1>
-    <div id="before_login" style="visibility: visible">
+    <div id="login_input_div" style="visibility: visible">
       <input id="id_input" type="text" name="id" />
       <input id="pw_input" type="password" name="password" />
       <button id="login_btn" type="button">Login</button>
       <div>
         <span id="login_failed" style="color: #ff0000; visibility: hidden">Login failed... Please try again</span>
       </div>
+    </div>
+    <div id="footer">
+      <span>Created by 새내기프로그램디자이너 & SPARCS</span>
     </div>
   </body>
 </html>

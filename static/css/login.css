@@ -1,0 +1,18 @@
+body {
+  background-color: #000000;
+  color: #ffffff;
+  padding-top: 250px;
+  text-align: center;
+  position: relative;
+}
+
+#login_input_div {
+  height: 100px;
+  vertical-align: center;
+}
+
+#footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
