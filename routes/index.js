@@ -302,6 +302,22 @@ module.exports = (app, passport) => {
     });
   });
 
+  function updateProblemList(res) {
+    ProblemSchema.find({}, (err, problemInfos) => {
+      if (err) return res.status(500);
+      problemList = problemInfos.sort((p1, p2) => {
+        if (p1.number < p2.number) return -1;
+        if (p1.number == p2.number) {
+          if (p1.title < p2.title) return -1;
+          if (p1.title > p2.title) return 1;
+          return 0;
+        }
+        return 1;
+      });
+      res.json({ success: true });
+    });
+  }
+
   app.get('/admin/story', (req, res) => {
     res.render('admin_story.html');
   });
