@@ -7,11 +7,12 @@
     <link rel="stylesheet" type="text/css" href="/static/css/story.css" />
   </head>
   <body>
-    <div class="right_align_wrapper">
+    <p class="right_align_wrapper">
       <a href="/main">go to main</a>
-    </div>
-    <h1><%= story.title %></h1>
+    </p>
     <img src="/static/storyImages/<%= story.imageName %>" width="800"/>
+    <br />
+    <br />
     <br />
     <a href="/problems/<%= story.number + 1 %>">다음으로</a>
     <div id="footer">
