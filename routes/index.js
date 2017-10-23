@@ -113,7 +113,7 @@ module.exports = (app, passport) => {
     else url = `problems/${req.user.progress + 1}`;
     res.render('main.ejs', {
       problems: problemList.slice(0, req.user.progress),
-      stories: req.user.timer_start === null ? storyList.slice(0, req.user.progress) : storyList.slice(0, req.user.progress + 1),
+      stories: storyList.slice(0, req.user.progress + 1),
       currProblemUrl: url,
     });
   });
