@@ -48,15 +48,11 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use('/', (req, res, next) => {
-  console.log('hi~', req.originalUrl);
   let urlTokens = req.originalUrl.split('/');
-  if (!req.user && !(urlTokens[1] === 'users') && !(urlTokens[1] === 'static' && (urlTokens[2] === 'javascript' || urlTokens[2] === 'css')) && req.originalUrl !== '/login') {
-    console.log('hello~');
+  if (!req.user && !(urlTokens[1] === 'users') && !(urlTokens[1] === 'static' && (urlTokens[2] === 'javascript' || urlTokens[2] === 'css')) && req.originalUrl !== '/login')
     res.redirect('/login');
-  } else {
-    console.log('fuck~');
+  else
     next();
-  }
 });
 app.use('/static/problemImages/:imgName', (req, res, next) => {
   const imgName = req.params.imgName;
