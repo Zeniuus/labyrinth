@@ -1,7 +1,7 @@
 let express = require('express');
 let app = express()
 
-let port = 3000;
+let port = 80;
 let bodyParser = require('body-parser');
 let cookieParser = require('cookie-parser');
 let session = require('express-session');
