@@ -11,49 +11,81 @@ $document.ready(() => {
   .then((res) => {
     let user = res.data.user;
     if (problemNum > user.progress) {
-      // let pastTime = new Date() - new Date(user.timer_start);
-      // let hintNum = pastTime >= 30000 ? 3 : Math.floor(pastTime/10000);
-      // updateHint();
-      //
-      // setInterval(() => {
-      //   pastTime = new Date() - new Date(user.timer_start);
-      //   timerElem.innerHTML = dateToTimer(pastTime);
-      //
-      //   if (pastTime >= 30000 && hintNum == 2
-      //       || pastTime >= 20000 && hintNum == 1
-      //       || pastTime >= 10000 && hintNum == 0) {
-      //     hintNum += 1;
-      //     updateHint();
-      //     alert('new hint arrived!');
-      //   }
-      // }, 100);
-      const pastTime = res.data.pastTime;
-      let timer = res.data.pastTime;
-
+      let pastTime = new Date() - new Date(user.timer_start);
+      let hintNum = pastTime >= 30000 ? 3 : Math.floor(pastTime/10000);
       updateHint();
 
-      if (pastTime < 30000) {
-        setTimeout(() => {
-          updateHint();
-        }, 30000 - (pastTime - pastTime%1000));
-      }
-      if (pastTime < 20000) {
-        setTimeout(() => {
-          updateHint();
-        }, 20000 - (pastTime - pastTime%1000));
-      }
-      if (pastTime < 10000) {
-        setTimeout(() => {
-          updateHint();
-        }, 10000 - (pastTime - pastTime%1000));
-      }
+      axios.get('/timer')
+      .then((res) => {
+        timerElem.innerHTML = dateToTimer(res.data.pastTime);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 
-      timerElem.innerHTML = dateToTimer(timer);
       setInterval(() => {
-        timer += 1000;
-        timerElem.innerHTML = dateToTimer(timer);
-        console.log(timer);
+        axios.get('/timer')
+        .then((res) => {
+          pastTime = res.data.pastTime;
+          timerElem.innerHTML = dateToTimer(pastTime);
+
+          if (pastTime >= 30000 && hintNum == 2
+              || pastTime >= 20000 && hintNum == 1
+              || pastTime >= 10000 && hintNum == 0) {
+            hintNum += 1;
+            updateHint();
+            alert('new hint arrived!');
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
       }, 1000);
+      // axios.get('/timer')
+      // .then((res) => {
+      //   const pastTime = res.data.pastTime;
+      //
+      //   updateHint();
+      //
+      //   if (pastTime < 30000) {
+      //     setTimeout(() => {
+      //       updateHint();
+      //       alert('new hint arrived!');
+      //     }, 30000 - (pastTime - pastTime%1000));
+      //   }
+      //   if (pastTime < 20000) {
+      //     setTimeout(() => {
+      //       updateHint();
+      //       alert('new hint arrived!');
+      //     }, 20000 - (pastTime - pastTime%1000));
+      //   }
+      //   if (pastTime < 10000) {
+      //     setTimeout(() => {
+      //       updateHint();
+      //       alert('new hint arrived!');
+      //     }, 10000 - (pastTime - pastTime%1000));
+      //   }
+      //
+      //   axios.get('/timer')
+      //   .then((res) => {
+      //     timerElem.innerHTML = dateToTimer(res.data.pastTime);
+      //   })
+      //   .catch((err) => {
+      //     console.log(err);
+      //   });
+      //   setInterval(() => {
+      //     axios.get('/timer')
+      //     .then((res) => {
+      //       timerElem.innerHTML = dateToTimer(res.data.pastTime);
+      //     })
+      //     .catch((err) => {
+      //       console.log(err);
+      //     });
+      //   }, 1000);
+      // })
+      // .catch((err) => {
+      //   console.log(err);
+      // });
     }
   })
   .catch((err) => {
