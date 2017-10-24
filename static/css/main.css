@@ -1,6 +1,6 @@
 @font-face {
   font-family: "흑백영화";
-  src: url("font.ttf") format("truetype");
+  src: url("font.ttf") format("truetype"), url("font.woff") format("woff");
 }
 
 body {
