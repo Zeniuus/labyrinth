@@ -1,6 +1,15 @@
 body {
+  color: #ffffff;
+  background-color: #000000;
+  text-align: center;
   position: relative;
+  padding-top: 200px;
   padding-bottom: 50px;
+  font-family: 흑백영화;
+}
+
+a:link, :visited {
+  color: #ff0000;
 }
 
 #footer {
