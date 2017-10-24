@@ -1,6 +1,14 @@
 body {
+  color: #ffffff;
+  background-color: #000000;
+  text-align: center;
   position: relative;
   padding-bottom: 50px;
+  font-family: 흑백영화;
+}
+
+img {
+  margin-top: 100px;
 }
 
 #footer {
