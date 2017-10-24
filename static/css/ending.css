@@ -3,12 +3,13 @@ body {
   background-color: #000000;
   text-align: center;
   position: relative;
+  padding-top: 50px;
   padding-bottom: 50px;
   font-family: 흑백영화;
 }
 
-img {
-  margin-top: 100px;
+a:link, :visited {
+  color: #ff0000;
 }
 
 #footer {
