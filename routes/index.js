@@ -95,11 +95,14 @@ module.exports = (app, passport) => {
   });
 
   app.get('/user', (req, res) => {
-    res.json({ user: req.user, });
+    res.json({
+      user: req.user,
+      pastTime: new Date() - new Date(req.user.timer_start),
+    });
   });
 
   app.get('/timer', (req, res) => {
-    res.json({ pastTime: new Date() - new Date(req.user.timer_start) })
+    res.json({ pastTime: new Date() - new Date(req.user.timer_start) });
   });
 
   app.get('/login', (req, res) => {
