@@ -10,12 +10,12 @@
   <body>
     <img src="/static/start.png" width="800"/>
     <p>
-      <a id="to_current_problem" href="<%= currProblemUrl %>">현재 문제로 가기</a>
+      <a id="to_current_problem" href="<%= currProblemUrl %>">Go to the current problem</a>
     </p>
     <br />
     <br />
     <span>
-      이전 문제 목록
+      Previous problems
     </span>
     <div id="past_problem_list">
       <% for (let i = 0; i < problems.length; i++) { %>
@@ -24,7 +24,7 @@
     </div>
     <br />
     <span>
-      이전 스토리 목록
+      Previous stories
     </span>
     <div id="past_story_list">
       <% for (let i = 0; i < stories.length; i++) { %>
@@ -32,7 +32,7 @@
       <% } %>
     </div>
     <div id="footer">
-      <span>Created by 새내기프로그램디자이너 & SPARCS</span>
+      <span>Created by Freshman Program Designer & SPARCS</span>
     </div>
   </body>
 </html>
