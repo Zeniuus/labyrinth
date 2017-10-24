@@ -1,9 +1,15 @@
+@font-face {
+  font-family: "흑백영화";
+  src: url("font.ttf") format("truetype"), url("font.woff") format("woff");
+}
+
 body {
   color: #ffffff;
   background-color: #000000;
   text-align: center;
   position: relative;
   padding-bottom: 50px;
+  font-family: 흑백영화;
 }
 
 h1 {
