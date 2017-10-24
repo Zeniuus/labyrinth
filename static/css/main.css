@@ -8,18 +8,13 @@ body {
   background-color: #000000;
   text-align: center;
   position: relative;
+  padding-top: 50px;
   padding-bottom: 50px;
   font-family: 흑백영화;
 }
 
-h1 {
-  margin-top: 100px;
-  text-align: center;
-}
-
 p {
-  margin-top: 100px;
-  font-size: 24px;
+  font-size: 16px;
 }
 
 a:link, :visited {
@@ -27,12 +22,7 @@ a:link, :visited {
 }
 
 #to_current_problem {
-  margin-top: 100px;
-  font-size: 32px;
-}
-
-#past_problem_list #past_story_list {
-  font-size: 20px;
+  font-size: 24px;
 }
 
 #footer {
