@@ -6,7 +6,21 @@ let ProblemSchema = require('./../models/problemInfo.js');
 let StorySchema = require('./../models/storyInfo.js');
 let LogSchema = require('./../models/logInfo.js');
 
-class_num = 26;
+class_num = 5;
+wordList = [
+  'android',
+  'elephant',
+  'illustrate',
+  'outstanding',
+  'underscore',
+];
+numberList = [
+  5132,
+  9781,
+  8051,
+  0162,
+  4019,
+];
 
 module.exports = (app, passport) => {
   let problemList = [];
@@ -49,9 +63,10 @@ module.exports = (app, passport) => {
         if (err) return res.status(500);
         for (let i = 1; i <= class_num; i += 1) {
           let userInfo = new UserSchema();
-          userInfo.id = `class${i}`;
-          userInfo.password = `class${i}`;
-          userInfo.name = `class${i}`;
+          userInfo.id = `class${26 + i}`;
+          userInfo.password = `${wordList[i-1]}${numberList[i-1] < 1000 ? '0' + numberList[i-1] : numberList[i-1]}`;
+          console.log(userInfo.password);
+          userInfo.name = `class${26 + i}`;
           userInfo.progress = 0;
           userInfo.last_success = new Date();
           userInfo.timer_start = null;
@@ -70,7 +85,7 @@ module.exports = (app, passport) => {
 
         let userInfo = new UserSchema();
         userInfo.id = 'admin';
-        userInfo.password = 'admin';
+        userInfo.password = 'labyrinth2017admin';
         userInfo.name = 'admin';
         userInfo.progress = 1000;
         userInfo.last_success = new Date();
