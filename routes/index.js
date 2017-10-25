@@ -154,10 +154,6 @@ module.exports = (app, passport) => {
     });
   });
 
-  app.get('/timer', (req, res) => {
-    res.json({ pastTime: new Date() - new Date(req.user.timer_start) });
-  });
-
   app.get('/login', (req, res) => {
     res.render('login.html');
   });
