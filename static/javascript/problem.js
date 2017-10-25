@@ -11,6 +11,8 @@ $document.ready(() => {
   axios.get('/user')
   .then((res) => {
     let user = res.data.user;
+    if (user.timer_start === null)
+      window.location.reload();
     if (problemNum > user.progress) {
       let pastTime = res.data.pastTime;
       let hintNum = pastTime >= 30000 ? 3 : Math.floor(pastTime/10000);

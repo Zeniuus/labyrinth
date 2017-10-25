@@ -189,7 +189,7 @@ module.exports = (app, passport) => {
     ProblemSchema.findOne({ number: req.params.problemNum }, (err, problemInfo) => {
       if (err) return res.status(500);
       if (!problemInfo) return res.status(500);
-      if (req.params.problemNum != req.user.progress + 1) return res.json({ hints: [] });
+      if (req.params.problemNum != req.user.progress + 1 || req.user.timer_start === null) return res.json({ hints: [] });
 
       let pastTime = new Date() - new Date(req.user.timer_start);
       if (pastTime >= 15*60*1000) return res.json({ hints: problemInfo.hint });
