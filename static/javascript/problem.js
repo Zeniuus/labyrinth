@@ -11,7 +11,7 @@ $document.ready(() => {
   .then((res) => {
     let user = res.data.user;
     if (problemNum > user.progress) {
-      let pastTime = new Date() - new Date(user.timer_start);
+      let pastTime = res.data.pastTime;
       let hintNum = pastTime >= 30000 ? 3 : Math.floor(pastTime/10000);
       updateHint();
 
