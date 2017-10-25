@@ -16,7 +16,7 @@ $document.ready(() => {
       let hintNum = pastTime >= 30000 ? 3 : Math.floor(pastTime/10000);
       updateHint();
 
-      axios.get('/user')
+      axios.get('/timer')
       .then((res) => {
         timerElem.innerHTML = dateToTimer(res.data.pastTime);
       })
@@ -24,24 +24,18 @@ $document.ready(() => {
         console.log(err);
       });
 
-      const timerInterval = setInterval(() => {
-        axios.get('/user')
+      setInterval(() => {
+        axios.get('/timer')
         .then((res) => {
-          if (res.data.user.progress + 1 != problemNum) {
-            hintsElem.innerHTML = '';
-            timerElem.innerHTML = '';
-            clearInterval(timerInterval);
-          } else {
-            pastTime = res.data.pastTime;
-            timerElem.innerHTML = dateToTimer(pastTime);
+          pastTime = res.data.pastTime;
+          timerElem.innerHTML = dateToTimer(pastTime);
 
-            if (pastTime >= 15*60*1000 && hintNum == 2
-                || pastTime >= 10*60*1000 && hintNum == 1
-                || pastTime >= 5*60*1000 && hintNum == 0) {
-              hintNum += 1;
-              updateHint();
-              alert('new hint arrived!');
-            }
+          if (pastTime >= 15*60*1000 && hintNum == 2
+              || pastTime >= 10*60*1000 && hintNum == 1
+              || pastTime >= 5*60*1000 && hintNum == 0) {
+            hintNum += 1;
+            updateHint();
+            alert('new hint arrived!');
           }
         })
         .catch((err) => {

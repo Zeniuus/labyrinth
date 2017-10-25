@@ -6,63 +6,20 @@ let ProblemSchema = require('./../models/problemInfo.js');
 let StorySchema = require('./../models/storyInfo.js');
 let LogSchema = require('./../models/logInfo.js');
 
-class_num = 26;
+class_num = 5;
 wordList = [
-  'agreement',
-  'broadcast',
-  'crazyarcade',
-  'dreaming',
-  'elementary',
-  'frustrating',
-  'greeting',
-  'hospital',
-  'initiate',
-  'jacobian',
-  'kindergarden',
-  'literature',
-  'migration',
-  'notificate',
-  'operation',
-  'previous',
-  'quadratic',
-  'response',
-  'statistics',
-  'triangle',
-  'ultimate',
-  'vulnerable',
-  'wednesday',
-  'xylitol',
-  'yesterday',
-  'zookeeper',
+  'android',
+  'elephant',
+  'illustrate',
+  'outstanding',
+  'underscore',
 ];
-
 numberList = [
-  0538,
-  1264,
-  5241,
-  0961,
-  4216,
-  6510,
-  0693,
-  7949,
-  0768,
-  5161,
-  1524,
-  2168,
-  9059,
-  9819,
-  6344,
-  1505,
-  0871,
-  1286,
-  6194,
-  8972,
-  1929,
-  0120,
-  6108,
-  9088,
-  5218,
-  1258,
+  5132,
+  9781,
+  8051,
+  0162,
+  4019,
 ];
 
 module.exports = (app, passport) => {
@@ -106,9 +63,10 @@ module.exports = (app, passport) => {
         if (err) return res.status(500);
         for (let i = 1; i <= class_num; i += 1) {
           let userInfo = new UserSchema();
-          userInfo.id = `class${i}`;
+          userInfo.id = `class${26 + i}`;
           userInfo.password = `${wordList[i-1]}${numberList[i-1] < 1000 ? '0' + numberList[i-1] : numberList[i-1]}`;
-          userInfo.name = `class${i}`;
+          console.log(userInfo.password);
+          userInfo.name = `class${26 + i}`;
           userInfo.progress = 0;
           userInfo.last_success = new Date();
           userInfo.timer_start = null;
@@ -152,6 +110,10 @@ module.exports = (app, passport) => {
       user: req.user,
       pastTime: new Date() - new Date(req.user.timer_start),
     });
+  });
+
+  app.get('/timer', (req, res) => {
+    res.json({ pastTime: new Date() - new Date(req.user.timer_start) });
   });
 
   app.get('/login', (req, res) => {
