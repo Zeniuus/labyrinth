@@ -181,9 +181,9 @@ module.exports = (app, passport) => {
       if (req.params.problemNum != req.user.progress + 1) return res.json({ hints: [] });
 
       let pastTime = new Date() - new Date(req.user.timer_start);
-      if (pastTime >= 30000) return res.json({ hints: problemInfo.hint });
-      if (pastTime >= 20000) return res.json({ hints: problemInfo.hint.slice(0, 2)});
-      if (pastTime >= 10000) return res.json({ hints: problemInfo.hint.slice(0, 1)});
+      if (pastTime >= 15*60*1000) return res.json({ hints: problemInfo.hint });
+      if (pastTime >= 10*60*1000) return res.json({ hints: problemInfo.hint.slice(0, 2)});
+      if (pastTime >= 5*60*1000) return res.json({ hints: problemInfo.hint.slice(0, 1)});
       return res.json({ hints: [] });
     });
   });

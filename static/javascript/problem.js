@@ -30,9 +30,9 @@ $document.ready(() => {
           pastTime = res.data.pastTime;
           timerElem.innerHTML = dateToTimer(pastTime);
 
-          if (pastTime >= 30000 && hintNum == 2
-              || pastTime >= 20000 && hintNum == 1
-              || pastTime >= 10000 && hintNum == 0) {
+          if (pastTime >= 15*60*1000 && hintNum == 2
+              || pastTime >= 10*60*1000 && hintNum == 1
+              || pastTime >= 5*60*1000 && hintNum == 0) {
             hintNum += 1;
             updateHint();
             alert('new hint arrived!');
@@ -42,51 +42,6 @@ $document.ready(() => {
           console.log(err);
         });
       }, 1000);
-      // axios.get('/timer')
-      // .then((res) => {
-      //   const pastTime = res.data.pastTime;
-      //
-      //   updateHint();
-      //
-      //   if (pastTime < 30000) {
-      //     setTimeout(() => {
-      //       updateHint();
-      //       alert('new hint arrived!');
-      //     }, 30000 - (pastTime - pastTime%1000));
-      //   }
-      //   if (pastTime < 20000) {
-      //     setTimeout(() => {
-      //       updateHint();
-      //       alert('new hint arrived!');
-      //     }, 20000 - (pastTime - pastTime%1000));
-      //   }
-      //   if (pastTime < 10000) {
-      //     setTimeout(() => {
-      //       updateHint();
-      //       alert('new hint arrived!');
-      //     }, 10000 - (pastTime - pastTime%1000));
-      //   }
-      //
-      //   axios.get('/timer')
-      //   .then((res) => {
-      //     timerElem.innerHTML = dateToTimer(res.data.pastTime);
-      //   })
-      //   .catch((err) => {
-      //     console.log(err);
-      //   });
-      //   setInterval(() => {
-      //     axios.get('/timer')
-      //     .then((res) => {
-      //       timerElem.innerHTML = dateToTimer(res.data.pastTime);
-      //     })
-      //     .catch((err) => {
-      //       console.log(err);
-      //     });
-      //   }, 1000);
-      // })
-      // .catch((err) => {
-      //   console.log(err);
-      // });
     }
   })
   .catch((err) => {
