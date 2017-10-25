@@ -6,6 +6,7 @@ $document.ready(() => {
   let answerInputElem = document.getElementById('answer_input');
   let timerElem = document.getElementById('timer');
   let hintsElem = document.getElementById('hints');
+  let wrongAnswerElem = document.getElementById('wrong_answer');
 
   axios.get('/user')
   .then((res) => {
@@ -97,11 +98,15 @@ $document.ready(() => {
       answer: answerInputElem.value
     })
     .then((res) => {
-      if (res.data.correct) window.location.replace('/stories/' + Number(problemNum));
-      else window.location.replace('/problems/' + problemNum);
+      if (res.data.correct) {
+        wrongAnswerElem.style.visibility = 'hidden';
+        window.location.replace('/stories/' + Number(problemNum));
+      } else {
+        wrongAnswerElem.style.visibility = 'visible';
+      }
     })
     .catch((err) => {
-
+      console.log(err);
     });
   });
 
