@@ -56,54 +56,54 @@ module.exports = (app, passport) => {
     res.redirect('/main');
   });
 
-  app.get('/users/reset', (req, res) => {
-    UserSchema.remove({}, (err) => {
-      if (err) return res.status(500);
-      LogSchema.remove({}, (err) => {
-        if (err) return res.status(500);
-        for (let i = 1; i <= class_num; i += 1) {
-          let userInfo = new UserSchema();
-          userInfo.id = `class${26 + i}`;
-          userInfo.password = `${wordList[i-1]}${numberList[i-1] < 1000 ? '0' + numberList[i-1] : numberList[i-1]}`;
-          console.log(userInfo.password);
-          userInfo.name = `class${26 + i}`;
-          userInfo.progress = 0;
-          userInfo.last_success = new Date();
-          userInfo.timer_start = null;
-          userInfo.save((err) => {
-            if (err) return res.status(500).end('database error');
-            let logInfo = new LogSchema();
-            logInfo.id = userInfo.id;
-            logInfo.log_start = [];
-            logInfo.log_end = [];
-            logInfo.save((err) => {
-              if (err) return res.status(500).end('database error');
-              res.end('success!');
-            });
-          });
-        }
-
-        let userInfo = new UserSchema();
-        userInfo.id = 'admin';
-        userInfo.password = 'labyrinth2017admin';
-        userInfo.name = 'admin';
-        userInfo.progress = 1000;
-        userInfo.last_success = new Date();
-        userInfo.timer_start = null;
-        userInfo.save((err) => {
-          if (err) return res.status(500).end('database error');
-          let logInfo = new LogSchema();
-          logInfo.id = userInfo.id;
-          logInfo.log_start = [];
-          logInfo.log_end = [];
-          logInfo.save((err) => {
-            if (err) return res.status(500).end('database error');
-            res.end('success!');
-          });
-        });
-      });
-    });
-  });
+  // app.get('/users/reset', (req, res) => {
+  //   UserSchema.remove({}, (err) => {
+  //     if (err) return res.status(500);
+  //     LogSchema.remove({}, (err) => {
+  //       if (err) return res.status(500);
+  //       for (let i = 1; i <= class_num; i += 1) {
+  //         let userInfo = new UserSchema();
+  //         userInfo.id = `class${26 + i}`;
+  //         userInfo.password = `${wordList[i-1]}${numberList[i-1] < 1000 ? '0' + numberList[i-1] : numberList[i-1]}`;
+  //         console.log(userInfo.password);
+  //         userInfo.name = `class${26 + i}`;
+  //         userInfo.progress = 0;
+  //         userInfo.last_success = new Date();
+  //         userInfo.timer_start = null;
+  //         userInfo.save((err) => {
+  //           if (err) return res.status(500).end('database error');
+  //           let logInfo = new LogSchema();
+  //           logInfo.id = userInfo.id;
+  //           logInfo.log_start = [];
+  //           logInfo.log_end = [];
+  //           logInfo.save((err) => {
+  //             if (err) return res.status(500).end('database error');
+  //             res.end('success!');
+  //           });
+  //         });
+  //       }
+  //
+  //       let userInfo = new UserSchema();
+  //       userInfo.id = 'admin';
+  //       userInfo.password = 'labyrinth2017admin';
+  //       userInfo.name = 'admin';
+  //       userInfo.progress = 1000;
+  //       userInfo.last_success = new Date();
+  //       userInfo.timer_start = null;
+  //       userInfo.save((err) => {
+  //         if (err) return res.status(500).end('database error');
+  //         let logInfo = new LogSchema();
+  //         logInfo.id = userInfo.id;
+  //         logInfo.log_start = [];
+  //         logInfo.log_end = [];
+  //         logInfo.save((err) => {
+  //           if (err) return res.status(500).end('database error');
+  //           res.end('success!');
+  //         });
+  //       });
+  //     });
+  //   });
+  // });
 
   app.get('/user', (req, res) => {
     res.json({
