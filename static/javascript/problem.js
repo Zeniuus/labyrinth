@@ -29,7 +29,7 @@ $document.ready(() => {
       const timerInterval = setInterval(() => {
         axios.get('/user')
         .then((res) => {
-          if (res.data.user.progress + 1 == problemNum) {
+          if (res.data.user.progress + 1 != problemNum) {
             hintsElem.innerHTML = '';
             timerElem.innerHTML = '';
             clearInterval(timerInterval);
