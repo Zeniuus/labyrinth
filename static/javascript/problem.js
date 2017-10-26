@@ -11,7 +11,7 @@ $document.ready(() => {
   axios.get('/user')
   .then((res) => {
     let user = res.data.user;
-    if (user.timer_start === null)
+    if (user.progress + 1 == problemNum && user.timer_start === null)
       window.location.reload();
     if (problemNum > user.progress) {
       let pastTime = res.data.pastTime;
