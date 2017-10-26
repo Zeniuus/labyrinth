@@ -49,7 +49,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use('/', (req, res, next) => {
   let urlTokens = req.originalUrl.split('/');
-  if (!req.user && !(urlTokens[1] === 'users') && !(urlTokens[1] === 'static' && (urlTokens[2] === 'javascript' || urlTokens[2] === 'css' || urlTokens[2] === 'font.ttf')) && req.originalUrl !== '/login')
+  if (!req.user && !(urlTokens[1] === 'static' && (urlTokens[2] === 'javascript' || urlTokens[2] === 'css' || urlTokens[2] === 'font.ttf')) && req.originalUrl !== '/login')
     res.redirect('/login');
   else
     next();
